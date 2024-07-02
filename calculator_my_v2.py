@@ -1,38 +1,63 @@
-"""Modifications to make:
+"""I wanted to have fun with the calculator program from assignment 
+7. "Walk-through: Calculator" and give it extra features.
+
+
+Modifications to make:
     - handle divide by zero
         DONE
     - make if-else block into a function
         DONE
     - handle words entered for operations
-        DONE but make it nicer
-    - drop the decimal if .0
+        DONE
+    - drop the decimal in ouput if .0
         DONE
     - handle non-digit characters for numbers (causes error now)
-        DONE but can be nicer
-    - convert words to numbers (for fun, more advanced handling of strings)
+        DONE but can be nicer (fixed in v3)
+    - call check_divide() inside calculate()
+        DONE
+    - convert words to numbers (for fun, more advanced handling of 
+      strings)
+        NOT DONE for this version
+Done with this version. See calculator_my_v3.py for more changes.
 """
 
 
 print('Welcome to Calculator!')
 
 
-# Get a number and check for correct format (convert to try-except block later):
+# Get a number and check for correct format:
 def get_number():
     number = input()
 
     # handle non-digit inputs for numbers:
-    def format_number(number):
-        for char in number:
-            if char.isdigit():
-                continue
-            elif char == '.':
-                continue
-            else:
-                print('Please enter a number. Numbers may include decimals:  ')
-                return get_number()
-        return float(number)
-    
-    return format_number(number)
+    for char in number:
+        if not (char.isdigit() or char == '.'):
+            print('Please enter a number (may include a decimal):  ', end='')
+            return get_number()
+    return float(number)
+
+# Get an operation and check for correct format:
+def get_operation():
+    operation = input()
+
+    add = ['1', 'add', 'addition', '+', 'plus']
+    subtract = ['2', 'subtract', 'subtraction', '-', 'minus']
+    multiply = ['3', 'multiply', 'multiplication', '*', 'times']
+    divide = ['4', 'divide', 'division', '/', 'divided by', 'divided']
+
+    if operation.casefold() in add:
+        return 'add'
+    elif operation.casefold() in subtract:
+        return 'subtract'
+    elif operation.casefold() in multiply:
+        return 'multiply'
+    elif operation.casefold() in divide:
+        return 'divide'
+    else:
+        print("Operation type not supported.\nPlease enter the number, name, "
+              "or symbol of the operation you wish to perform.\n1. Add (+)  "
+              "2. Subtract (-)  3. Multiply (*)  4. Divide (/):  ", end='')
+        return get_operation()
 
 
 # Ask the user for the first number.
@@ -45,66 +70,35 @@ number2 = get_number()
 
 # Ask the user for an operation to perform.
 print("What operation would you like to perform?\n"
-      "1. Add 2. Subtract 3. Multiply 4. Divide:  ", end='')
-operation = input()
+      "1) Add (+)  2) Subtract (-)  3. Multiply (*)  4. Divide (/):  ", 
+      end='')
+operation = get_operation()
 
-
-# Handle numbers, words, and symbols as operations:
-def format_operation(operation):
-    
-    add = ['1', 'add', 'addition', '+', 'plus']
-    subtract = ['2', 'subtract', 'subtraction', '-', 'minus']
-    multiply = ['3', 'multiply', 'multiplication', '*', 'times']
-    divide = ['4', 'divide', 'division', '/', 'divided by', 'divided']
-    
-    if operation.isdigit():
-        return operation
-    elif operation.casefold() in add:
-        return '1'
-    elif operation.casefold() in subtract:
-        return '2'
-    elif operation.casefold() in multiply:
-        return '3'
-    elif operation.casefold() in divide:
-        return '4'
-    # else: # for future development
-    #     print("Operation type not supported. Please run the program again")
-    #     return '5'
-    
-operation = format_operation(operation)
-    
 
 # handle divide by zero:
 def check_divide(operation, number2):
     if operation == '4' and number2 == 0:
-        print("Cannot divide by zero. Please enter a different second number.\n"
-              "What's the new second number?:  ", end='')
-        number2 = float(input())
-        return number2
-    else:
-        return number2
-
-number2 = check_divide(operation, number2)
-
+        print("Cannot divide by zero. Please enter a different second "
+              "number:  ", end='')
+        return get_number()
+    return number2
 
 # Perform the operation on the two numbers and return the result.
 def calculate(number1, number2, operation):
-    if operation == '1':    # addition
+    if operation == 'add':
         return number1 + number2
-    elif operation == '2':  # subtraction
+    elif operation == 'subtract':
         return number1 - number2
-    elif operation == '3':  # multiplication
+    elif operation == 'multiply':
         return number1 * number2
-    elif operation == '4':  # division
+    elif operation == 'divide':
+        number2 = check_divide(operation, number2)
         return number1 / number2
-    else:
-        pass # handle '5' from format_operation
 
 
 # Format the result to make the decimals look nicer:
 def format_output(result):
     return int(result) if result % 1 == 0 else result
-
 
 # Run calculation and and print to terminal.
 result = format_output(calculate(number1, number2, operation))

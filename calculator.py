@@ -1,3 +1,5 @@
+# PY101, lesson 2, 7. "Walk-through: Calculator" assignment
+
 print('Welcome to Calculator!')
 
 # Ask the user for the first number.
