@@ -67,7 +67,7 @@ def get_number():
     return float(number)
 
 # Accept various operation inputs:
-add = ['1', '1)', 'add', 'addition', '+', 'plus']
+add = ['1', '1)', '+', 'add', 'addition', 'plus']
 subtract = ['2', '2)', '-', 'subtract', 'subtraction', 'minus']
 multiply = ['3', '3)', '*', 'multiply', 'multiplication', 'times']
 divide = ['4', '4)', '/', 'divide', 'division', 'divided by', 'divided']
