@@ -6,6 +6,8 @@ I wanted to have fun with the calculator program from assignment
 Modifications to make:
     - handle divide by zero
         DONE
+    - allow floats for inputs
+        DONE
     - make if-else block into a function
         DONE
     - handle words entered for operations
