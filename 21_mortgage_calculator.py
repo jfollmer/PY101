@@ -81,14 +81,7 @@ decimal.getcontext().rounding = decimal.ROUND_05UP
 
 while True:
 
-    # Ask for loan amount and check input for validity:
-    def get_loan_amount():
-
-        # currency = # use UTC codes
-
-        prompt(msg('enter_loan_amount', LANG))
-        amount = input_prompt().strip('$ ').replace(',', '').replace('_', '')
-
+    def check_amount_validity(amount):
         try:
             amount = Dec(amount)
             if amount < 0:
@@ -102,93 +95,111 @@ while True:
             prompt(msg('enter_number', LANG))
             prompt(msg('may_enter_dec_commas', LANG))
             amount = get_loan_amount()
+        
+        return amount
+
+    # Ask for loan amount and check input for validity:
+    def get_loan_amount():
+
+        # currency = # use UTC codes?
+
+        prompt(msg('enter_loan_amount', LANG))
+        amount = input_prompt().strip('$ ').replace(',', '').replace('_', '')
+
+        amount = check_amount_validity(amount)
 
         return amount
 
-    loan_amount = get_loan_amount()
+    LOAN_AMOUNT = get_loan_amount()
+    
+    # This needs to be outside of this function or written differently,
+    #     and this needs a Dec(rate) try/except block or something.
+    # Don't accept excessively long numbers:
+    def check_apr_length(rate):
+        if len(str(Dec(rate) % 1)) > 6:
+            prompt(msg('decimal_length', LANG))
+            prompt(msg('enter_apr', LANG))
+            rate = input_prompt()
+            rate = check_apr_length(rate)
 
-    # Ask for APR and check input for validity:
-    def get_apr_to_mpr():
-        prompt(msg('enter_apr', LANG))
-        rate = input_prompt()
-        
-        # This needs to be outside of this function or written differently,
-            # and this needs a Dec(rate) try/except block or something.
-        # Don't accept excessively long numbers:
-        # def check_rate_length(rate):
-        #     if len(float(rate) % 1) > 3:
-        #         prompt("Please try again. Decimals should be 3 digits or "
-        #                "less.")
-        #         prompt("What is the annual percentage rate (APR)?")
-        #         rate = input_prompt()
-        #         rate = check_rate_length()
-        #         return rate
-        # rate = check_rate_length(rate)
+        return rate
 
+    def check_apr_validity(rate):
         try:
+            rate = check_apr_length(rate)
             rate = Dec(rate)
             # rate should be a positive number or zero:
             if rate < 0:
                 prompt(msg('enter_pos_num_zero', LANG))
-                rate = get_apr_to_mpr()
+                rate = get_apr()
         except decimal.InvalidOperation:
             prompt(msg('enter_num_format', LANG))
             prompt(msg('apr_examples', LANG))
-            rate = get_apr_to_mpr()
-
-        # return monthly percentage rate instead of APR:
+            rate = get_apr()
+        
         return rate
 
-    monthly_rate = get_apr_to_mpr() * Dec(.01) / Dec(12)
+    # Ask for APR and check input for validity:
+    def get_apr():
+        prompt(msg('enter_apr', LANG))
+        rate = input_prompt()
+        rate = check_apr_validity(rate)
+        return rate
 
-    # Ask for loan duration and check inputs for validity:
-    def get_loan_duration():
+    MONTHLY_RATE = get_apr() * Dec(.01) / Dec(12)
 
-        def get_timeframe():
-            prompt(msg('choose_months_years', LANG))
-            prompt(msg('months_years_examples', LANG))
-            timeframe = input_prompt().strip("' ").strip('"').casefold()
+    def get_timeframe():
+        prompt(msg('choose_months_years', LANG))
+        prompt(msg('months_years_examples', LANG))
+        timeframe = input_prompt().strip("' ").strip('"').casefold()
 
-            if timeframe not in {'months', 'm', 'years', 'y'}:
-                prompt(msg('try_again', LANG))
-                timeframe = get_timeframe()
-                if timeframe in {'months', 'm'}:
-                    timeframe = 'months'
-                elif timeframe in {'years', 'y'}:
-                    timeframe = 'years'
-            return timeframe
+        if timeframe not in {'months', 'm', 'years', 'y'}:
+            prompt(msg('try_again', LANG))
+            timeframe = get_timeframe()
 
-        timeframe = get_timeframe()
+        if timeframe in {'months', 'm'}:
+            timeframe = 'months'
+        elif timeframe in {'years', 'y'}:
+            timeframe = 'years'
 
-        def get_duration():
-            prompt(msg('how_long_loan', LANG).format(timeframe=timeframe))
-            duration = input_prompt()
+        return timeframe
 
-            try:
-                duration = Dec(duration)
-                # don't divide by zero:
-                if duration <= 0:
-                    prompt(msg('enter_pos_num', LANG))
-                    duration = get_duration()
-                if timeframe == 'years':
-                    duration = duration * 12
-                return duration
-            except decimal.InvalidOperation:
-                prompt(msg('enter_number', LANG))
-                duration = get_duration()
-                return duration
-
-        duration = get_duration()
-        # print(duration)
-
-        if duration > (100 * 12):
-            prompt(f"Maximum loan duration is "   # figure out language support
-                   "{'100 years' if timeframe == 'years' else '1200 months'}.")
-            duration = get_duration()
+    def check_duration_validity(timeframe, duration):
+        try:
+            duration = Dec(duration)
+            # don't divide by zero:
+            if duration <= 0:
+                prompt(msg('enter_pos_num', LANG))
+                duration = get_total_duration(timeframe)
+            # convert years to months:    
+            if timeframe == 'years':
+                duration = duration * 12
+        except decimal.InvalidOperation:
+            prompt(msg('enter_number', LANG))
+            duration = get_total_duration(timeframe)
 
         return duration
 
-    duration_months = get_loan_duration()
+    def get_total_duration(timeframe):
+        prompt(msg('how_long_loan', LANG).format(timeframe=timeframe))
+        duration = input_prompt()
+        duration = check_duration_validity(timeframe, duration)
+        return duration
+
+    # Ask for loan duration and check inputs for validity:
+    def get_loan_duration():
+        timeframe = get_timeframe()
+        total_duration = get_total_duration(timeframe)
+
+        # put this in one of the supporting functions
+        if total_duration > (100 * 12):
+            prompt(f"Maximum loan duration is "   # figure out language support
+                   "{'100 years' if timeframe == 'years' else '1200 months'}.")
+            total_duration = get_total_duration(timeframe)
+
+        return total_duration
+
+    MONTHS_DURATION = get_loan_duration()
 
     def get_balloon():
         pass # return amount or False
@@ -202,29 +213,29 @@ while True:
         payment = amount * (mpr / (1 - (1 + mpr) ** (-duration)))
         return payment
 
-    monthly_payment = calculate(loan_amount, monthly_rate, duration_months)
+    MONTHLY_PAYMENT = calculate(LOAN_AMOUNT, MONTHLY_RATE, MONTHS_DURATION)
 
     # if balloon:
     #     result += balloon
         # WRONG - maybe create new variable(s), change results that are printed
 
-    # for format_result(result) to use
+    # add commas into result
+    def add_comma(lst, neg_i):
+        lst.insert(neg_i - 3, ',')
+        neg_i = neg_i - 4
+
+        if len(lst) > (abs(neg_i) + 3):
+            lst = add_comma(lst, neg_i)
+
+        return lst, neg_i
+
+    # for format_currency(result) to use
     def add_commas(long_number):
         # turn into a list for processing
         digits_list = list(str(long_number))
 
         i = digits_list.index('.')
         neg_i = i - len(digits_list) # -3, the decimal point
-
-        # add commas into result
-        def add_comma(lst, neg_i):
-            lst.insert(neg_i - 3, ',')
-            neg_i = neg_i - 4
-
-            if len(lst) > (abs(neg_i) + 3):
-                lst = add_comma(lst, neg_i)
-
-            return lst, neg_i
 
         if len(digits_list) > (abs(neg_i) + 3):
             add_comma(digits_list, neg_i)
@@ -235,7 +246,7 @@ while True:
         return commas_added
 
     # Format result
-    def format_result(result):
+    def format_currency(result):
         # round result to even cents
         result = result.quantize(Dec("1.00"))
 
@@ -245,14 +256,26 @@ while True:
         # add dollar sign into result
         return f"${result}"
 
+    prompt(msg('results', LANG))
+    
     prompt(msg('monthly_payment', LANG))
-    prompt(f"{format_result(monthly_payment)}") # variable name might change
+    prompt(f"{format_currency(MONTHLY_PAYMENT).rjust(36)}") 
+    # variable name might change
+    
     prompt(msg('total_interest', LANG))
-    prompt(f"{format_result(monthly_payment * duration_months - loan_amount)}")
-    prompt(msg('total_paid'.format(duration_months=duration_months)))
-    prompt(f"{format_result(monthly_payment * duration_months)}")
+    prompt(f"{format_currency(MONTHLY_PAYMENT * MONTHS_DURATION - LOAN_AMOUNT).rjust(36)}")
+
+    # LINE TOO LONG ^^^
+
+    prompt(msg('total_paid', LANG).format(MONTHS_DURATION=MONTHS_DURATION))
+    
+    # ^^^ .format NOT WORKING (it was working before MONTHS_DURATION change)
+    
+    prompt(f"{format_currency(MONTHLY_PAYMENT * MONTHS_DURATION).rjust(36)}")
+    
+    prompt('------------------------------------')
 
     prompt(msg('calculate_new_loan', LANG))
     answer = input_prompt()
-    if answer not in {'y', 'n'}:   # don't accept wrong language
+    if answer not in {'y', 's'}:   # don't accept wrong language ('y' vs 's')
         sysexit(1) # make sure passing correct argument

@@ -9,6 +9,7 @@
         "enter_number": "Please enter a number.",
         "may_enter_dec_commas": "You may optionally include a decimal and commas.",
         "enter_apr": "What is the annual percentage rate (APR)?",
+        "decimal_length": "Decimals should be 4 digits or less.",
         "enter_pos_num_zero": "Please enter a positive number or zero.",
         "enter_num_format": "Please enter a number in one of the following formats:",
         "apr_examples": "Examples: 6, 6%, 5.9, 5.9%, 5.99, 5.99%",
@@ -16,9 +17,10 @@
         "months_years_examples": "Enter 'm' for 'months' or 'y' for 'years':",
         "try_again": "Please try again.",
         "how_long_loan": "How many {timeframe} long is the loan?",
+        "results": "------------- RESULTS --------------",
         "monthly_payment": "Monthly payment:",
         "total_interest": "Total interest:",
-        "total_paid": "Total of {duration_months} payments:",
+        "total_paid": "Total of {MONTHS_DURATION} payments:",
         "calculate_new_loan": "Would you like to calculate a new loan? (y/n)"
     },
     "es": {
