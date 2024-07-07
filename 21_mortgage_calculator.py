@@ -35,7 +35,7 @@ import json
 with open('21_mortgage_calculator_messages.json', 'r') as file:
     MSGS = json.load(file)
 
-def msg(message, lang='en'):
+def msg(message, lang):
     return MSGS[lang][message]
 
 # Custom prompts:
@@ -48,7 +48,7 @@ def input_prompt():
 
     # don't accept excessively long input:
     if len(string) > 16:
-        prompt("Input is too long. Please try again:")
+        prompt(msg('input_too_long', LANG))
         string = input_prompt()
 
     return string
@@ -67,7 +67,7 @@ def get_language():
     prompt("Select a language:")
     prompt(f"  'en' ({languages['en']})")
     prompt(f"  'es' ({languages['es']})")
-    language = input_prompt().strip("' ").strip('"')
+    language = input_prompt().strip("' ").strip('"').casefold()
 
     if language not in languages:
         prompt(f"Please enter 'en' or 'es'.")
@@ -80,7 +80,6 @@ LANG = get_language()
 decimal.getcontext().rounding = decimal.ROUND_05UP
 
 while True:
-
 
     # Ask for loan amount and check input for validity:
     def get_loan_amount():
@@ -255,5 +254,5 @@ while True:
 
     prompt(msg('calculate_new_loan', LANG))
     answer = input_prompt()
-    if answer != 'y':   # add language support
+    if answer not in {'y', 'n'}:   # don't accept wrong language
         sysexit(1) # make sure passing correct argument
