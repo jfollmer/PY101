@@ -83,11 +83,13 @@ while True:
         prompt("What is the annual percentage rate (APR)?")
         rate = input_prompt()
         
-        # This needs to be outside of this function or written differently
+        # This needs to be outside of this function or written differently,
+            # and this needs a Dec(rate) try/except block or something.
         # Don't accept excessively long numbers:
         # def check_rate_length(rate):
-        #     if len(rate) > 7:
-        #         prompt("Please try again. Input should be less than 7 digits.")
+        #     if len(float(rate) % 1) > 3:
+        #         prompt("Please try again. Decimals should be less than "
+        #                " 3 digits.")
         #         prompt("What is the annual percentage rate (APR)?")
         #         rate = input_prompt()
         #         rate = check_rate_length()
