@@ -23,6 +23,8 @@ To Do:
         - accept commas as decimal points and periods as denomination
           separators
         - accept alternate currency symbols
+    - consider using while True loops for some of the recursions
+    - consider moving function definitions outside the main while loop
 """
 
 import decimal
