@@ -1,73 +1,88 @@
-"""PY101, Lesson 2, assignment 28. 'Rock, Paper, Scissors Bonus Features
-
-To Do:
-    - handle empty strings input
-    - get_user_choice and check_validity logic is too convoluted, simplify
-"""
+#PY101, Lesson 2, assignment 28. 'Rock, Paper, Scissors Bonus Features
 
 import random
 
 CHOICES_DICT = {
-    'r': 'Rock', 
-    'p': 'Paper', 
-    'l': 'Lizard',
-    's': 'Scissors, Spock',
+    'R': 'ROCK', 
+    'P': 'PAPER', 
+    'L': 'LIZARD',
+    'S': 'SCISSORS, SPOCK',
 }
 
-CHOICES = ', '.join([ value for value in CHOICES_DICT.values() ]).split(', ')
+CHOICES = ', '.join(list(CHOICES_DICT.values())).split(', ')
 
 # key defeats values
 CHOICE_DEFEATS = {
-    'Rock': {'Scissors', 'Lizard'},
-    'Paper': {'Rock', 'Spock'},
-    'Scissors': {'Paper', 'Lizard'},
-    'Lizard': {'Paper', 'Spock'},
-    'Spock': {'Scissors', 'Rock'},
+    'ROCK': {'SCISSORS', 'LIZARD'},
+    'PAPER': {'ROCK', 'SPOCK'},
+    'SCISSORS': {'PAPER', 'LIZARD'},
+    'LIZARD': {'PAPER', 'SPOCK'},
+    'SPOCK': {'SCISSORS', 'ROCK'},
 }
 
 def prompt(message):
     print(f"==> {message}")
 
-def check_validity(user_choice):
-    try:
-        user_choice = CHOICES_DICT.get(user_choice)
-        while user_choice not in CHOICES:
-            prompt("That's not a valid choice. Try again:")
-            user_choice = CHOICES_DICT.get(input()[0])
-    except IndexError:
-        check_validity(user_choice)
+def check_validity(choice):
+    if choice is None or len(choice) < 1:
+        choice = get_user_choice()
 
-    return user_choice
+    elif len(choice) == 1:
+        if choice[0] == 'S':
+            while choice not in CHOICES_DICT['S'].split(', '):
+                prompt(f"Choose one (enter whole word): "
+                       f"{CHOICES_DICT['S']}:")
+                choice = input().upper().strip('" ').strip("'")
+        else:
+            choice = CHOICES_DICT.get(choice)
+
+    else:
+        prompt("That's not a valid choice. Try again:")
+        choice = get_user_choice()
+
+    return choice
 
 def get_user_choice():
-    prompt(f"Choose one: {CHOICES}")
+    prompt(f"Choose one: {', '.join(CHOICES)}")
     prompt("You may enter the first letter or the whole word.")
-    user_choice = input()[0].lower() # index error with empty strings
+    choice = input().upper().strip('" ').strip("'")
 
-    if user_choice[0] == 's':
-        while user_choice not in CHOICES_DICT['s'].split(', '):
-            prompt(f"Choose one (enter whole word): "
-                f"{CHOICES_DICT['s']:}")
-            user_choice = input().lower().capitalize()
-    else:
-        user_choice = CHOICES_DICT.get(user_choice)
-    # check_validity(user_choice)
+    while choice not in CHOICES:
+        choice = check_validity(choice)
+    return choice
 
-    return user_choice
+def determine_winner(u_choice, c_choice):
+    prompt(f"You chose {u_choice}, computer chose {c_choice}")
 
-def determine_winner(user_choice, computer_choice):
-    """Defining this up here improves readability/maintainability. 
-    Encapsulates logic, allows you to limit your focus to work on this
-    specific piece of the puzzle.
-    """
-    prompt(f"You chose {user_choice}, computer chose {computer_choice}")
+    for win, lose in CHOICE_DEFEATS.items():
+        if (u_choice == win) and (c_choice in lose):
+            victor = "You win!"
+        elif (c_choice == win) and (u_choice in lose):
+            victor = "Computer wins!"
+        else:
+            victor = "It's a tie!"
 
-    for key, values in CHOICE_DEFEATS.items():
-        if (user_choice == key) and (computer_choice in values):
-            return "You win!"
-        elif (computer_choice == key) and (user_choice in values):
-            return "Computer wins!"
-    return "It's a tie!"
+    return victor
+
+user_score = 0
+computer_score = 0
+
+def track_winners(victor):
+    global user_score, computer_score
+
+    if max(user_score, computer_score) < 5:
+        if victor == "You win!":
+            user_score += 1
+        if victor == "Computer wins!":
+            computer_score += 1
+
+    if user_score == 5 or computer_score == 5:
+        if user_score == 5:
+            prompt("*** Congratulations! You won Best of 5 Matches! ***")
+        elif computer_score == 5:
+            prompt("*** Computer won Best of 5 Matches! ***")
+        user_score = 0
+        computer_score = 0
 
 while True:
 
@@ -75,12 +90,14 @@ while True:
 
     computer_choice = random.choice(CHOICES)
 
-    prompt(determine_winner(user_choice, computer_choice))
+    winner = determine_winner(user_choice, computer_choice)
+    prompt(winner)
+    track_winners(winner)
 
     prompt("Do you want to play again (y/n)?")
     answer = input().lower()
-    
-    while answer not in ['y', 'n']:
+
+    while answer not in ['y', 'n', 'yes', 'no']:
         prompt("Please enter 'y' or 'n'.")
         answer = input().lower()
 
