@@ -1,4 +1,5 @@
-"""
+"""PY101, Lesson 2, Assignment 8. "Pseudocode":
+
 Write out pseudocode (both casual and formal) that does the following:
 
 1. a function that returns the sum of two numbers
