@@ -1,4 +1,4 @@
-# PY101-109 Small Problems, Easy 1, Problem 1:
+# PY101-109 Small Problems, Easy 1, Problem 1. "Isn't it Odd?":
 
 # Write a function that takes one integer argument and returns True when 
 # the number's absolute value is odd, False otherwise.

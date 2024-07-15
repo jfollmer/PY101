@@ -1,4 +1,4 @@
-# PY101-109 Small Problems, Easy 1, Problem 3:
+# PY101-109 Small Problems, Easy 1, Problem 3. "Even Numbers":
 
 """Print all even numbers from 1 to 99, inclusive, with each number on a 
 separate line.

@@ -1,4 +1,4 @@
-# PY101-109 Small Problems, Easy 1, Problem 2:
+# PY101-109 Small Problems, Easy 1, Problem 2. "Odd Numbers":
 
 """Print all odd numbers from 1 to 99, inclusive, with each number on a 
 separate line.
