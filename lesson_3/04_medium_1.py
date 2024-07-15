@@ -1,8 +1,6 @@
 # PY101, Lesson 3, Assignment 5. "Practice Problems: Medium 1":
 
-# Come back to / repeat questions 4, 7. Also still want a deeper 
-# understanding of 5 but that seems like a deep-ish rabbithole for 
-# later.
+# Come back to / repeat questions 4, 7.
 
 """Question 1: Let's do some "ASCII Art": a stone-age form of nerd 
 artwork from back in the days before computers had video screens.
@@ -113,6 +111,10 @@ don't understand why it prints False. But the bonus answer is:
 """
 import math
 print(math.isnan(nan_value))
+"""The given solution explains that nan is a special numeric value that 
+indicates that an operation that was intended to return a number failed,
+and Python doesn't let you use == to determine whether a value is nan.
+"""
 
 # Question 6: What is the output of the following code?
 
