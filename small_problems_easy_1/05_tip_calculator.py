@@ -5,6 +5,8 @@ amount and a tip rate. The program must compute the tip, then print both
 the tip and the total amount of the bill. You can ignore input 
 validation and assume that the user will enter valid numbers.
 
+Example:
+
 What is the bill? 200
 What is the tip percentage? 20
 
