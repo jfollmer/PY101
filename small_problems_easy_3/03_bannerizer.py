@@ -70,7 +70,7 @@ def print_in_box(string, max_width=76):
 
 def word_wrap(string, max_width=76):
     if len(string) <= max_width:
-        return string.strip(' ')
+        return string
     else:
         line = string[0 : max_width]
         remainder = string[max_width:len(string)]
@@ -78,7 +78,7 @@ def word_wrap(string, max_width=76):
         return wrapped
         # line = string[0 : max_width]   # do a git branch
         # line = line[0 : line.rfind(' ')]
-        # remainder = string.removeprefix(line) # prefix isn't removed bc you added a \n and it doesn't match
+        # remainder = string.removeprefix(line).strip(' ')
         # wrapped = line + '\n' + word_wrap(remainder, max_width)
         # return wrapped
         # results in endless loop
