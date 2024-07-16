@@ -30,3 +30,26 @@ Output for Example 2:
 *********
 """
 
+
+def triangle(n):
+    for i in range(1, n + 1):
+        print((' ' * (n - i)) + ('*' * i))
+
+triangle(5)
+triangle(9)
+
+
+# Given solution:
+
+def triangle(height):
+    for num in range(1, height + 1):
+        spaces = height - num
+        stars = num
+        print(f'{" " * spaces}{"*" * stars}')
+
+# Student solution I like:
+
+def triangle(n):
+    for i in range(1, n + 1):
+        stars = "*" * i
+        print(stars.rjust(n))

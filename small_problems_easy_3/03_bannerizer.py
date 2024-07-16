@@ -68,16 +68,20 @@ def print_in_box(string, max_width=76):
             print('| ' + line.ljust(max_width + 2, ' ')  + ' |')
         print(horizontal_edge_padding, horizontal_edge, sep='\n')
 
-
 def word_wrap(string, max_width=76):
     if len(string) <= max_width:
-        wrapped = string
-        return wrapped
+        return string.strip(' ')
     else:
-        line = string[0 : max_width] + '\n'
+        line = string[0 : max_width]
         remainder = string[max_width:len(string)]
-        wrapped = line + word_wrap(remainder, max_width)
+        wrapped = line + '\n' + word_wrap(remainder, max_width)
         return wrapped
+        # line = string[0 : max_width]   # do a git branch
+        # line = line[0 : line.rfind(' ')]
+        # remainder = string.removeprefix(line) # prefix isn't removed bc you added a \n and it doesn't match
+        # wrapped = line + '\n' + word_wrap(remainder, max_width)
+        # return wrapped
+        # results in endless loop
 
 def wrap_in_box(string, max_width=76): # 76 = 80 minus two chars on each side
     if len(string) <= max_width:
@@ -94,3 +98,31 @@ wrap_in_box('For a challenging but fun exercise, try word wrapping messages '
 
 # just have to change word_wrap() to wrap on the words instead of chars,
 # do this by comparing len words joined and maxwidth
+
+        # words = string.split()
+        # line = ''
+        # for word in words:
+        #     while len(line) <= max_width:
+        #         line += words.pop(word.index(word)) + ' '
+        # print(line)
+        # # line = string[0 : max_width] + '\n'
+        # remainder = string[max_width:len(string)]
+        # wrapped = line + word_wrap(remainder, max_width)
+        # return wrapped
+
+        # line = string[0 : max_width] + '\n'
+        # line = line[0 : line.rfind(' ')] + '\n'
+        # remainder = string.removeprefix(line)
+        # wrapped = line + word_wrap(remainder, max_width)
+        # return wrapped
+        # results in endless loop
+
+        # Version that works:
+    #     def word_wrap(string, max_width=76):
+            # if len(string) <= max_width:
+            #     return string
+            # else:
+            #     line = string[0 : max_width] + '\n'
+            #     remainder = string[max_width:len(string)]
+            #     wrapped = line + word_wrap(remainder, max_width)
+            #     return wrapped

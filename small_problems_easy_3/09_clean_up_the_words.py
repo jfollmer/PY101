@@ -12,3 +12,14 @@ print(clean_up("---what's my +*& line?") == " what s my line ")
 # True
 """
 
+
+def clean_up(string):
+    cleaned = ''
+    for char in string:
+        if char.isalpha():
+            cleaned += char
+        elif not cleaned.endswith(' '):
+            cleaned += ' '
+    return cleaned
+
+print(clean_up("---what's my +*& line?") == " what s my line ") # True
