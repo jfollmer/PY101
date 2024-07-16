@@ -19,3 +19,16 @@ OMEGA = "\u03A9"              # UTF-16 character 'Ω' (omega)
 print(utf16_value(OMEGA) == 937)
 print(utf16_value(OMEGA + OMEGA + OMEGA) == 2811)
 """
+
+def utf16_value(string):
+    utf16_values_list = [ ord(char) for char in list(string) ]
+    return sum(utf16_values_list)
+
+print(utf16_value('Four score') == 984)
+print(utf16_value('Launch School') == 1251)
+print(utf16_value('a') == 97)
+print(utf16_value('') == 0)
+OMEGA = "\u03A9"              # UTF-16 character 'Ω' (omega)
+print(utf16_value(OMEGA) == 937)
+print(utf16_value(OMEGA + OMEGA + OMEGA) == 2811)
+print(utf16_value('ΩΩΩ') == 2811)
