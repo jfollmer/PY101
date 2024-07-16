@@ -12,3 +12,8 @@ Hello
 Hello
 """
 
+def repeat(string, times):
+    for _ in range(times):
+        print(string)
+
+repeat('Hello', 3)
