@@ -52,17 +52,20 @@ with basic Python.
 """
 
 
-def print_in_box(string, max_width=76):
-    if len(string) <= max_width:
-        horizontal_edge = '+' + ('-' * (len(string) + 2)) + '+'
-        horizontal_edge_padding = '|' + (' ' * (len(string) + 2)) + '|'
+def print_in_box(text, max_width=76):
+    if len(text) <= max_width:
+        horizontal_edge = '+' + ('-' * (len(text) + 2)) + '+'
+        horizontal_edge_padding = '|' + (' ' * (len(text) + 2)) + '|'
+
         print(horizontal_edge, horizontal_edge_padding, sep='\n')
-        print('| ' + string + ' |')
+        print('| ' + text + ' |')
         print(horizontal_edge_padding, horizontal_edge, sep='\n')
+
     else:
-        lines = string.splitlines()
+        lines = text.splitlines()
         horizontal_edge = '+' + ('-' * (max_width + 4)) + '+'
         horizontal_edge_padding = '|' + (' ' * (max_width + 4)) + '|'
+
         print(horizontal_edge, horizontal_edge_padding, sep='\n')
         for line in lines:
             print('| ' + line.ljust(max_width + 2, ' ')  + ' |')
@@ -83,13 +86,12 @@ def word_wrap(string, max_width=76):
         # return wrapped
         # results in endless loop
 
-def wrap_in_box(string, max_width=76): # 76 = 80 minus two chars on each side
+def wrap_in_box(string, max_width=76): # 76 == 80 minus two chars on each side
     if len(string) <= max_width:
         return print_in_box(string)
     else:
         wrapped_text = word_wrap(string, max_width)
         return print_in_box(wrapped_text)
-
 
 wrap_in_box('For a challenging but fun exercise, try word wrapping messages '
             'that are too long to fit, so that they appear on multiple lines '
