@@ -16,10 +16,35 @@ print(clean_up("---what's my +*& line?") == " what s my line ")
 def clean_up(string):
     cleaned = ''
     for char in string:
-        if char.isalpha():
+        if char.isalpha() and char.isascii():
             cleaned += char
         elif not cleaned.endswith(' '):
             cleaned += ' '
     return cleaned
 
 print(clean_up("---what's my +*& line?") == " what s my line ") # True
+# Given solution presents this problem, so I added and char.isascii():
+print(clean_up("Καλωσήρθες") == "Καλωσήρθες")   # was True now False
+
+
+# Given solution:
+
+def is_ascii_letter(char):
+    return char.isalpha() and char.isascii()
+
+def clean_up(text):
+    clean_text = ''
+
+    for idx, char in enumerate(text):
+        if is_ascii_letter(char):
+            clean_text += char
+        elif idx == 0 or clean_text[-1] != ' ':
+            clean_text += ' '
+
+    return clean_text
+
+print(clean_up("---what's my +*& line?") == " what s my line ") # True
+print(clean_up("Καλωσήρθες") == "Καλωσήρθες")   # False
+
+# Not sure why you need a new function when you can just add it as a 
+# condition.
