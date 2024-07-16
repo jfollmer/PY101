@@ -49,22 +49,23 @@ print(century(1127) == "12th")          # True
 print(century(11201) == "113th")        # True
 
 
-def add_ordinal_suffix(n):
-    ordinal = str(n).rjust(2, '0')
-    if ordinal.endswith('1') and ordinal[-2] != '1':
-        return ordinal.removeprefix('0') + 'st'
-    elif ordinal.endswith('2') and ordinal[-2] != '1':
-        return ordinal.removeprefix('0') + 'nd'
-    elif ordinal.endswith('3') and ordinal[-2] != '1':
-        return ordinal.removeprefix('0') + 'rd'
+def add_ordinal_suffix(century):
+    ones_place = century % 10
+    tens_place = century % 100 // 10
+    if ones_place == 1 and tens_place != 1:
+        return str(century) + 'st'
+    elif ones_place == 2 and tens_place != 1:
+        return str(century) + 'nd'
+    elif ones_place == 3 and tens_place != 1:
+        return str(century) + 'rd'
     else:
-        return ordinal.removeprefix('0') + 'th'
+        return str(century) + 'th'
 
 def century(year):
     prefix = year // 100
     century = prefix + 1 if year % 100 != 0 else prefix
     
-    return add_ordinal_suffix(str(century))
+    return add_ordinal_suffix(century)
 
 print(century(2000) == "20th")          # True
 print(century(2001) == "21st")          # True
