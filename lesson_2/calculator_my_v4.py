@@ -1,4 +1,5 @@
-"""Calculator version 2.1
+"""Calculator version 4 - final version! (pretty much ...)
+
 I wanted to have fun with the calculator program from assignment 
 7. 'Walk-through: Calculator' and give it extra features. This version
 was done after completing PY101.

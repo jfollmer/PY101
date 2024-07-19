@@ -1,7 +1,7 @@
-"""Calculator version 2.0
+"""Calculator version 2
+
 I wanted to have fun with the calculator program from assignment 
 7. 'Walk-through: Calculator' and give it extra features.
-
 
 Modifications to make:
     - handle divide by zero
