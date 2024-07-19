@@ -2,6 +2,7 @@
 I wanted to have fun with the calculator program from assignment 
 7. 'Walk-through: Calculator' and give it extra features. This version
 was done after assignment 11. 'Walk-through: Refactoring Calculator'.
+
 Modifications to make (from v2):
     - handle divide by zero
         DONE
@@ -59,7 +60,7 @@ def get_number():
     except ValueError:
         prompt("Unsupported format. Accepted characters include numbers 0-9, "
                "a negative sign (-), and a decimal (.). Please enter a new "
-               "second number.")
+               "number.")
         return get_number()
 
     return float(number)
@@ -69,7 +70,7 @@ add = ['1', '1)', 'add', 'addition', '+', 'plus']
 subtract = ['2', '2)', '-', 'subtract', 'subtraction', 'minus']
 multiply = ['3', '3)', '*', 'multiply', 'multiplication', 'times']
 divide = ['4', '4)', '/', 'divide', 'division', 'divided by', 'divided']
-power = ['5', '5)', '^', '**' 'power', 'to the power of']
+power = ['5', '5)', '^', '**', 'power', 'to the power of']
 sqroot = ['6', '6)', '√', 'sqrt', 'square root', 'squareroot', 'root',
           'sqroot']
 

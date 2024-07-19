@@ -1,43 +1,31 @@
 """Calculator version 2.1
 I wanted to have fun with the calculator program from assignment 
 7. 'Walk-through: Calculator' and give it extra features. This version
-was done after assignment 11. 'Walk-through: Refactoring Calculator'.
+was done after completing PY101.
 
-
-Modifications to make (from v2):
-    - handle divide by zero
+Modifications to make in this version:
+    - make valid operations a dictionary, adjust function to accommodate
         DONE
-    - make if-else block into a function
-        DONE
-    - handle words entered for operations
-        DONE
-    - drop the decimal in ouput if .0
-        DONE
-    - handle non-digit characters for numbers
+    - reorganize order of code so it makes more sense
         DONE
     - convert words to numbers (for fun, more advanced handling of 
       strings)
         NOT DONE in this version
-More modifications as per assignment 11:
-    - create a unique terminal prompt
+Modifications as learned in various assignments:
+    - make final changes pylint recommended (per assignment 10)
         DONE
-    - make if-else block a match-case block
-        DONE for calculate() but not get_operation() (doesn't work with 
-        'in')
     - ask if user wants to perform another calculation and start over if 
-      so
+      so (per assignment 11)
         DONE
-More modifications I'd like:
-    - rewrite check_validity() using a try-except block
+    - make functions shorter by condensing logic / putting it in more
+      logical places / making function responsibilities make more sense
+      (per coding tips assignments 22 & 27)
         DONE
-    - nested functions don't actually need to be nested functions
+    - add banner to welcome message (see bannerizer exercise), make
+      things prettier in general
         DONE
-    - remove check_divide() and just use its code inside calculate()
-        DONE
-    - support power and square root operations
-        DONE
-    - reorganize code
-        DONE
+    - add translations (per assignment 19)
+        NOT DONE
 """
 
 from math import sqrt
@@ -48,21 +36,28 @@ operations = {
     'subtract': {'2', '2)', '-', 'subtract', 'subtraction', 'minus'},
     'multiply': {'3', '3)', '*', 'multiply', 'multiplication', 'times'},
     'divide': {'4', '4)', '/', 'divide', 'division', 'divided by', 'divided'},
-    'power': {'5', '5)', '^', '**' 'power', 'to the power of'},
+    'power': {'5', '5)', '^', '**', 'power', 'to the power of'},
     'sqroot': {'6', '6)', '√', 'sqrt' , 'square root', 'squareroot', 'root',
                'sqroot'},
 }
 
-# Unique terminal prompt:
+# Put welcome message in banner:
+def print_welcome_message(message):
+    prompt('+--' + '-' * len(message) + '--+')
+    prompt('|  ' + ' ' * len(message) + '  |')
+    prompt('|  ' + message + '  |')
+    prompt('|  ' + ' ' * len(message) + '  |')
+    prompt('+--' + '-' * len(message) + '--+')
+
+# Unique terminal prompts:
 # Use prompt() instead of print()
-def prompt(message):
+def prompt(message=''):
     print(f"==> {message}")
 
 # Use input_prompt() instead of input()
-def input_prompt():
-    return input("==>: ")
+def input_prompt(message=''):
+    return input(f"==>: {message}")
 
-# import pdb
 # Get a number, and if not correct format, get a new one:
 def get_number(op=None):
     number = input_prompt()
@@ -70,7 +65,6 @@ def get_number(op=None):
     try:
         number = float(number)
         if op == 'divide' and number == 0:
-            print(3, op, number)
             prompt("Can't divide by zero. Please enter a new second number.")
             number = get_number(op)
         return number
@@ -90,66 +84,70 @@ def get_operation():
         if op.casefold() in value_set:
             return key
 
-    else:     # accidentally discovered for-else blocks, documentation confirms
-        prompt("Not a valid operation type.")              # validity and usage
-        prompt("Please enter the number, name, or symbol of the operation:")
-        return get_operation()
-
+    prompt("Not a valid operation type.")
+    prompt("Please enter the number, name, or symbol of the operation:")
+    return get_operation()
 
 # Get number(s) and the operation, plus some logic if divide or sqroot:
 def get_inputs():
+    prompt()
     prompt("What's the first number?")
     num1 = get_number()
+    prompt()
     prompt("What operation would you like to perform?")
     op = get_operation()
 
     if op == 'sqroot':
         return (num1, None, op)
-    else:
-        prompt("What's the second number?")
-        num2 = get_number(op)
-        return (num1, num2, op)
+
+    prompt()
+    prompt("What's the second number?")
+    num2 = get_number(op)
+    return (num1, num2, op)
 
 # Perform the operation, and don't divide by zero:
-def calculate(number1, number2, operation):
-    match operation:
+def calculate(num1, num2, op):
+    match op:
         case 'add':
-            return number1 + number2
+            return num1 + num2
         case 'subtract':
-            return number1 - number2
+            return num1 - num2
         case 'multiply':
-            return number1 * number2
+            return num1 * num2
         case 'divide':
-            return number1 / number2
+            return num1 / num2
         case 'power':
-            return number1**number2
+            return num1**num2
         case 'sqroot':
-            return sqrt(number1)
+            return sqrt(num1)
 
 # Format the result to make the decimals look nicer:
-def format_output(result):
-    return int(result) if result % 1 == 0 else result
+def format_output(rslt):
+    return int(rslt) if rslt % 1 == 0 else rslt
 
 def calculate_again():
+    prompt()
     prompt("Would you like to do another calculation? (y/n)")
-    answer = input_prompt()
-    
-    if answer.casefold() not in {'y', 'n', 'yes', 'no'}:
-        prompt("Please enter 'y' or 'n':")
-        answer = input_prompt()
-    
-    return answer[0] == 'y'
+    ans = input_prompt()
 
-prompt('Welcome to Calculator!')
+    if ans.casefold() not in {'y', 'n', 'yes', 'no'}:
+        prompt("Please enter 'y' or 'n':")
+        ans = input_prompt()
+
+    return ans[0] == 'y'
 
 while True:
+    prompt()
+    print_welcome_message('Welcome to Calculator!')
 
     number1, number2, operation = get_inputs()
 
-    # Run calculation and and print to terminal.
     result = format_output(calculate(number1, number2, operation))
+
+    prompt()
     prompt(f"The result is: {result}")
 
     answer = calculate_again()
-    if answer == False:
+    if answer is False:
+        prompt("Thank you for using Calculator!")
         break
