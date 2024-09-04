@@ -44,11 +44,11 @@ operations = {
 
 # Put welcome message in banner:
 def print_welcome_message(message):
-    prompt('+--' + '-' * len(message) + '--+')
-    prompt('|  ' + ' ' * len(message) + '  |')
-    prompt('|  ' + message + '  |')
-    prompt('|  ' + ' ' * len(message) + '  |')
-    prompt('+--' + '-' * len(message) + '--+')
+    prompt('┌──' + '─' * len(message) + '──┐')
+    prompt('│  ' + ' ' * len(message) + '  │')
+    prompt('│  ' + message + '  │')
+    prompt('│  ' + ' ' * len(message) + '  │')
+    prompt('└──' + '─' * len(message) + '──┘')
 
 # Unique terminal prompts:
 # Use prompt() instead of print()

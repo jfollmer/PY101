@@ -2,6 +2,8 @@
 
 Basic version that basically works.
 To Do:
+    - accept percent sign after apr
+        - NOT DONE
     - Handle leftover fractional cents after n months. Maybe use decimal 
       module.
         DONE
@@ -56,9 +58,9 @@ def input_prompt():
     return string
 
 # Print welcome message:
-prompt("|--------------------------------------------|")
-prompt("| Welcome to Mortgage / Car Loan Calculator! |")
-prompt("|--------------------------------------------|")
+prompt("┌────────────────────────────────────────────┐")
+prompt("│ Welcome to Mortgage / Car Loan Calculator! │")
+prompt("└────────────────────────────────────────────┘")
 
 languages = {
     'en': "English",
@@ -121,8 +123,8 @@ while True:
         if len(str(Dec(rate) % 1)) > 6:
             prompt(msg('decimal_length', LANG))
             prompt(msg('enter_apr', LANG))
-            rate = input_prompt()
-            rate = check_apr_length(rate)
+            rate = input_prompt().strip('%')
+            rate = check_apr_length(rate).strip('%')
 
         return rate
 
@@ -137,7 +139,7 @@ while True:
         except decimal.InvalidOperation:
             prompt(msg('enter_num_format', LANG))
             prompt(msg('apr_examples', LANG))
-            rate = get_apr()
+            rate = get_apr().strip('%')
         
         return rate
 
